@@ -866,3 +866,7 @@ body[data-page="quote"]{padding-bottom:0}
 .qoff .btn{margin-top:18px}
 .filter .tab small{margin-left:4px;font-family:var(--latin);font-size:12px;opacity:.7}
 [hidden]{display:none!important}
+
+/* 후기 소제목 */
+.rv .rv-t{margin-top:4px;font-family:var(--serif);font-weight:700;font-size:19px;line-height:1.45;color:var(--deep);text-wrap:balance}
+.rv .rv-t + .body{margin-top:10px}
