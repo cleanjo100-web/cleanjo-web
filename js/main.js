@@ -129,7 +129,7 @@
     if (m) $$('input[name="svc"]').forEach(function(c){ if (c.value === SVC[m[1] - 1]) c.checked = true; });
 
     var msg = $('#formMsg');
-    if (!SITE.quoteEndpoint) msg.textContent = '아직 접수 주소가 연결되지 않아 실제로 보내지지 않습니다. (js/config.js의 quoteEndpoint)';
+    var TEL = SITE.tel || '';
 
     var step = 1;
     var reqs = {1:['svc','area','town'], 2:['kind','size'], 3:['name','tel','agree']};
@@ -140,7 +140,7 @@
       if (k === 'kind') return !!$('#kind').value;
       if (k === 'size') return /^\d{1,4}$/.test($('#size').value.trim());
       if (k === 'name') return $('#name').value.trim().length > 0;
-      if (k === 'tel') return /^01\d-?\d{3,4}-?\d{4}$/.test($('#tel').value.trim());
+      if (k === 'tel') return /^01\d-?\d{3,4}-?\d{4}$/.test($('#tel').value.trim().replace(/\s/g, ''));
       if (k === 'agree') return $('#agree').checked;
       return true;
     }
@@ -152,6 +152,12 @@
     }
     ['change','input'].forEach(function(ev){
       form.addEventListener(ev, function(e){ var f = e.target.closest('[data-req]'); if (f && f.classList.contains('invalid') && valid(f.dataset.req)) f.classList.remove('invalid'); });
+    });
+    /* 휴대폰 번호 입력하면 하이픈 자동 */
+    var telIn = $('#tel');
+    telIn.addEventListener('input', function(){
+      var d = this.value.replace(/\D/g, '').slice(0, 11);
+      this.value = d.length < 4 ? d : d.length < 8 ? d.slice(0, 3) + '-' + d.slice(3) : d.slice(0, 3) + '-' + d.slice(3, d.length - 4) + '-' + d.slice(-4);
     });
     function stepTo(n){
       step = n;
@@ -165,54 +171,46 @@
     }
     $('#next').addEventListener('click', function(){ if (check(step)) stepTo(step + 1); });
     $('#prev').addEventListener('click', function(){ stepTo(step - 1); });
-
-    if (!SITE.quoteEndpoint) { form.hidden = true; var st = $('.steps'); if (st) st.hidden = true; var qo = $('#qoff'); if (qo) qo.hidden = false; }
-    var photos = $('#photos'), max = SITE.maxPhotos || 6;
-    if (photos) photos.addEventListener('change', function(){
-      var n = this.files.length;
-      $('#pcnt').textContent = !n ? '고른 사진 없음' : n > max ? '사진은 ' + max + '장까지 보낼 수 있어요. 앞의 ' + max + '장만 보낼게요.' : '사진 ' + n + '장 골랐어요';
+    /* 위쪽 단계 표시를 눌러도 이동 (앞 단계는 확인 후) */
+    [1,2,3].forEach(function(i){
+      var s = $('#st' + i); if (!s) return;
+      s.style.cursor = 'pointer';
+      s.addEventListener('click', function(){ for (var k = 1; k < i; k++) { if (!check(k)) { stepTo(k); return; } } stepTo(i); });
     });
 
-    /* 사진을 줄여서 base64로 */
-    function shrink(file){
-      return new Promise(function(res){
-        var img = new Image(), url = URL.createObjectURL(file);
-        img.onload = function(){
-          var side = SITE.photoMaxSide || 1600, k = Math.min(1, side / Math.max(img.width, img.height));
-          var c = document.createElement('canvas'); c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
-          c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); URL.revokeObjectURL(url);
-          res({name: file.name.replace(/\.\w+$/, '') + '.jpg', type: 'image/jpeg', data: c.toDataURL('image/jpeg', .82).split(',')[1]});
-        };
-        img.onerror = function(){ URL.revokeObjectURL(url); res(null); };
-        img.src = url;
-      });
-    }
-
     function done(){ form.hidden = true; $('.steps').hidden = true; var d = $('#done'); d.hidden = false; d.focus(); }
+    function fail(text){
+      var b = $('#send'), lbl = $('.lbl', b);
+      b.classList.remove('loading'); b.removeAttribute('aria-busy'); lbl.textContent = '견적 요청 보내기';
+      msg.classList.add('err-msg'); msg.innerHTML = text;
+    }
+    var telLink = TEL ? ' <a href="tel:' + TEL.replace(/[^\d]/g, '') + '">' + TEL + '</a>' : '';
     form.addEventListener('submit', function(e){
       e.preventDefault();
       if (!check(3)) return;
       var b = $('#send'), lbl = $('.lbl', b);
+      msg.classList.remove('err-msg'); msg.textContent = '';
+      if (!SITE.quoteEndpoint) { fail('지금은 온라인 접수를 받을 수 없어요. 전화로 연락 주시면 바로 상담해 드릴게요.' + telLink); return; }
       b.classList.add('loading'); b.setAttribute('aria-busy', 'true'); lbl.textContent = '보내는 중';
-      msg.classList.remove('err-msg');
-      if (!SITE.quoteEndpoint) { setTimeout(done, 700); return; }
       var fd = new FormData(form), data = {};
-      ['area','town','kind','size','date','name','tel','memo','website'].forEach(function(k){ data[k] = (fd.get(k) || '').toString().trim(); });
+      ['area','town','kind','size','date','when','name','tel','memo','website'].forEach(function(k){ data[k] = (fd.get(k) || '').toString().trim(); });
       data.svc = fd.getAll('svc').join(', ');
       data.page = location.href;
-      var files = photos ? [].slice.call(photos.files, 0, max) : [];
-      Promise.all(files.map(shrink)).then(function(list){
-        data.photos = list.filter(Boolean);
-        /* text/plain 으로 보내야 Apps Script가 사전 요청 없이 받음 */
-        return fetch(SITE.quoteEndpoint, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify(data)});
-      }).then(function(r){ return r.json(); }).then(function(j){
-        if (!j || !j.ok) throw new Error(j && j.error || 'fail');
-        done();
-      }).catch(function(){
-        b.classList.remove('loading'); b.removeAttribute('aria-busy'); lbl.textContent = '견적 요청 보내기';
-        msg.classList.add('err-msg');
-        msg.textContent = '보내지 못했어요. 잠시 뒤 다시 눌러 주시거나 전화, 카톡으로 연락 주세요.';
-      });
+      data.id = Date.now().toString(36) + Math.random().toString(36).slice(2, 7);  /* 같은 신청이 두 번 저장되지 않게 */
+      var body = JSON.stringify(data);
+      /* text/plain 으로 보내야 Apps Script가 사전 요청(CORS) 없이 받음 */
+      fetch(SITE.quoteEndpoint, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: body})
+        .then(function(r){ return r.json(); })
+        .then(function(j){
+          if (j && j.ok) return done();
+          fail((j && j.message) || ('보내지 못했어요. 잠시 뒤 다시 눌러 주시거나 전화로 연락 주세요.' + telLink));
+        })
+        .catch(function(){
+          /* 응답을 읽지 못한 경우(일부 브라우저): 응답 없이 한 번 더 보냄. 같은 접수번호는 시트에 한 번만 저장됨 */
+          fetch(SITE.quoteEndpoint, {method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: body})
+            .then(done)
+            .catch(function(){ fail('인터넷 연결을 확인하고 다시 눌러 주세요. 급하시면 전화로 연락 주세요.' + telLink); });
+        });
     });
   }
 

@@ -12,6 +12,6 @@ window.SITE = {
 
   /* 견적 신청서를 받을 Google Apps Script 웹 앱 주소 (backend/README.md 참고)
      예: 'https://script.google.com/macros/s/AKfy.../exec'
-     비워 두면 신청서가 실제로 보내지지 않는 '미리보기' 상태로 동작합니다. */
-  quoteEndpoint: ''
+     비워 두면 신청서는 보이지만, 보내기를 누르면 전화로 연락 달라는 안내가 나옵니다. */
+  quoteEndpoint: 'https://script.google.com/macros/s/AKfycbxI_EmEty4DezYMcxUqMgiMnSLSipPr5LSkK2sODckqfSyq56wqZYG5D2ROxxIVwAFidw/exec'
 };

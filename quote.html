@@ -9,7 +9,9 @@
 <meta property="og:site_name" content="청소해JO.">
 <meta property="og:title" content="가격·무료 견적 | 청소해JO.">
 <meta property="og:description" content="가격을 정하는 기준을 확인하고 세 단계로 견적을 신청하세요. 상담하며 항목별로 알려 드려요.">
-<meta property="og:image" content="images/og.jpg">
+<link rel="canonical" href="https://cleanjo.co.kr/quote.html">
+<meta property="og:url" content="https://cleanjo.co.kr/quote.html">
+<meta property="og:image" content="https://cleanjo.co.kr/images/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="theme-color" content="#FFFFFF">
@@ -22,7 +24,7 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="css/style.css">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "HomeAndConstructionBusiness", "name": "청소해JO.", "alternateName": "CLEAN-JO", "telephone": "010-6773-8654", "areaServed": ["서울", "인천", "경기"], "slogan": "말만 해JO. 마침표는 저희가 찍을게요.", "legalName": "청소해조", "taxID": "294-67-00535", "foundingDate": "2023-05-08", "address": {"@type": "PostalAddress", "streetAddress": "경인로77길 49, 109동 2층 201-51호", "addressLocality": "영등포구", "addressRegion": "서울특별시", "addressCountry": "KR"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "HomeAndConstructionBusiness", "name": "청소해JO.", "alternateName": "CLEAN-JO", "telephone": "010-6773-8654", "areaServed": ["서울", "인천", "경기"], "slogan": "말만 해JO. 마침표는 저희가 찍을게요.", "legalName": "청소해조", "taxID": "294-67-00535", "foundingDate": "2023-05-08", "address": {"@type": "PostalAddress", "streetAddress": "경인로77길 49, 109동 2층 201-51호", "addressLocality": "영등포구", "addressRegion": "서울특별시", "addressCountry": "KR"}, "url": "https://cleanjo.co.kr/", "logo": "https://cleanjo.co.kr/images/logo/icon-512.png", "image": "https://cleanjo.co.kr/images/og.jpg"}</script>
 </head>
 <body data-page="quote">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -115,12 +117,11 @@
       <ol class="steps" aria-label="진행 단계">
         <li class="now" id="st1">STEP 01<b>무엇을, 어디서</b></li>
         <li id="st2">STEP 02<b>공간과 날짜</b></li>
-        <li id="st3">STEP 03<b>연락처</b></li>
+        <li id="st3">STEP 03<b>이름과 연락처</b></li>
       </ol>
     </section>
 
-    <div class="qoff card" id="qoff" hidden><h2 class="h3s" style="margin-top:0">전화로 바로 상담해 드려요</h2><p>온라인 신청서는 준비하고 있어요. 지금은 전화로 연락 주시면 평수와 상태를 여쭤보고 바로 안내해 드릴게요.</p><a class="btn" href="tel:01067738654" data-link="tel">010-6773-8654 전화하기</a></div>
-      <form id="qform" novalidate>
+    <form id="qform" novalidate>
       <div class="hp" aria-hidden="true"><label>웹사이트<input name="website" tabindex="-1" autocomplete="off"></label></div>
       <fieldset class="fstep" id="f1">
         <legend class="sr">1단계 무엇을, 어디서</legend>
@@ -182,8 +183,8 @@
       </fieldset>
 
       <fieldset class="fstep" id="f3" hidden>
-        <legend class="sr">3단계 연락처</legend>
-        <h2>연락처</h2>
+        <legend class="sr">3단계 이름과 연락처</legend>
+        <h2>이름과 연락처를 남겨 주세요</h2>
         <div class="field" data-req="name">
           <label for="name">이름</label>
           <input class="uline" id="name" name="name" autocomplete="name" placeholder="예: 김청소">
@@ -195,11 +196,21 @@
           <p class="err">휴대폰 번호를 확인해 주세요.</p>
         </div>
         <div class="field">
+          <span class="lab">연락 받기 편한 시간<span class="opt-note">선택</span></span>
+          <div class="chips">
+            <label class="chip"><input type="radio" name="when" value="아무 때나" checked><span>아무 때나</span></label>
+            <label class="chip"><input type="radio" name="when" value="오전"><span>오전</span></label>
+            <label class="chip"><input type="radio" name="when" value="오후"><span>오후</span></label>
+            <label class="chip"><input type="radio" name="when" value="저녁"><span>저녁</span></label>
+            <label class="chip"><input type="radio" name="when" value="문자 먼저"><span>문자로 먼저</span></label>
+          </div>
+        </div>
+        <div class="field">
           <label for="memo">더 알려 주실 것<span class="opt-note">선택</span></label>
           <textarea class="uline" id="memo" name="memo" placeholder="예: 입주일이 정해져 있어요, 반려동물이 있어요"></textarea>
         </div>
         <dl class="privacy">
-          <div><dt>받는 정보</dt><dd>이름, 연락처, 지역, 공간 정보</dd></div>
+          <div><dt>받는 정보</dt><dd>이름, 연락처, 지역, 공간 정보, 연락 받기 편한 시간, 요청 사항</dd></div>
           <div><dt>쓰는 곳</dt><dd>견적 안내와 일정 연락</dd></div>
           <div><dt>보관 기간</dt><dd>상담이 끝나면 파기해요. 작업을 맡기시면 A/S 기간이 끝날 때까지 보관해요.</dd></div>
         </dl>

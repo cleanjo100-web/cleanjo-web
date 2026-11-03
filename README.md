@@ -15,7 +15,7 @@ faq.html        자주 묻는 질문 (견적·가격·일정 변경, 작업, A/S
 privacy.html    개인정보 처리방침
 css/style.css   모든 페이지 공통 스타일 (맨 위 :root 에 브랜드 색상값)
 js/config.js    전화번호(010-6773-8654), 숨고 프로필 주소, 카카오톡 주소, 견적 접수 주소
-                카톡 주소가 비어 있으면 카톡 버튼이 숨겨지고, 접수 주소가 비어 있으면 견적 신청서 대신 전화 안내가 보입니다.
+                카톡 주소가 비어 있으면 카톡 버튼이 숨겨지고, 접수 주소가 비어 있으면 신청서를 보낼 때 전화 안내가 나옵니다.
 js/main.js      메뉴, 탭, 견적 신청서, 전후 슬라이더, FAQ, 사례 거르기, 클릭 측정
 images/clean/   청소해JO. 블로그 현장 사진 (원래 파일명 대응표: images/clean/사진목록.txt)
 images/ref/     사무실 탭 사진
@@ -43,8 +43,8 @@ robots.txt      검색 허용 (Sitemap 줄은 set_domain.py 가 넣음)
 - 페이지 안의 [확인 필요] 표시와 빈 사진 자리는 모두 정리했습니다.
 - 공개 뒤 이어서 할 일
   1. 카카오톡 채널 채팅 주소 → `js/config.js` 의 `kakao` (넣으면 카톡 버튼이 나타남)
-  2. 견적 신청서 접수 주소 → `backend/README.md` 순서대로 Apps Script 배포 후 `quoteEndpoint` (넣으면 신청서가 나타남)
-  3. 주소가 정해지면 `python tools/set_domain.py https://주소`
+  2. (완료 2026.11.03) 견적 신청서 접수 주소 연결 — `js/config.js` 의 `quoteEndpoint`
+  3. (완료 2026.11.03) 도메인 cleanjo.co.kr — canonical·og·구조화 데이터·sitemap.xml·robots.txt·CNAME 반영
   4. 사무실·준공 현장 사진이 생기면 `images/ref/` 사진 교체
 
 ## 측정
@@ -100,3 +100,12 @@ robots.txt      검색 허용 (Sitemap 줄은 set_domain.py 가 넣음)
 - 후기: 거르기 버튼의 개수 표시를 없애고, 후기마다 작은 제목(저희가 붙인 것)을 달았습니다.
 - 전후 사진 중 원근 변형으로 찌그러져 보이던 6쌍(휴지걸이, 욕실 배수구, 변기 주변 바닥, 가스레인지, 샤워부스 유리, 싱크대)을 다시 만들었습니다. 이제 '후' 사진은 회전·크기·위치만 맞추고 모양은 바꾸지 않습니다(../realign.py). 구도가 조금 달라도 피사체가 자연스러운 쪽을 택했습니다.
 - 준공청소: 업체 제공 필라테스 스튜디오 사진(images/work/site/)으로 청소 페이지 준공청소 탭 사진을 바꾸고, '준공청소, 실제 현장'(전후 비교 5쌍 + 운동실 전·후 6장)을 새로 넣었습니다. 예전 참고 사진(images/ref/site-finished.webp)은 뺐습니다.
+- 견적 신청서(2026.10.31): 신청서를 항상 보이게 바꾸고 '연락 받기 편한 시간'을 더했습니다. 휴대폰 번호는 입력할 때 하이픈이 자동으로 들어갑니다. 구글 시트 연결용 Apps Script를 새로 썼습니다(backend/).
+
+## 도메인 연결 (cleanjo.co.kr · GitHub Pages)
+1. 저장소 루트의 `CNAME` 파일에 `cleanjo.co.kr` 이 들어 있습니다. 지우지 마세요.
+2. 도메인 구매처 DNS 설정
+   - `@`(루트) A 레코드 4개: 185.199.108.153 / 185.199.109.153 / 185.199.110.153 / 185.199.111.153
+   - `www` CNAME: `깃허브아이디.github.io`
+3. 저장소 Settings → Pages → Custom domain 에 cleanjo.co.kr 확인 → DNS check 통과 후 **Enforce HTTPS** 체크
+4. 검색 등록: 구글 서치 콘솔·네이버 서치어드바이저에 https://cleanjo.co.kr 등록 후 sitemap.xml 제출

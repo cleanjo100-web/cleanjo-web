@@ -861,9 +861,6 @@ body[data-page="quote"]{padding-bottom:0}
 .care2 .kicker{font-family:var(--sans);font-weight:700;font-size:13px;letter-spacing:.04em;color:var(--teal)}
 
 /* ===== 1차 배포본 ===== */
-.qoff{margin-top:28px;padding:28px 26px}
-.qoff p{margin-top:8px;color:var(--ink-2)}
-.qoff .btn{margin-top:18px}
 .filter .tab small{margin-left:4px;font-family:var(--latin);font-size:12px;opacity:.7}
 [hidden]{display:none!important}
 
