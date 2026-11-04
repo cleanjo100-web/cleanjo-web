@@ -22,7 +22,7 @@
 
   /* 하단 버튼: 지금 보는 서비스로 견적 */
   var dockQuote = $('#dockQuote');
-  function setDock(){ if (!dockQuote) return; var s = body.dataset.svc; dockQuote.href = s ? 'quote.html?svc=' + s : 'quote.html'; }
+  function setDock(){ if (!dockQuote) return; var s = body.dataset.svc; dockQuote.href = s ? 'quote?svc=' + s : 'quote'; }
   setDock();
 
   /* 탭 */

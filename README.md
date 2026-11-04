@@ -2,6 +2,9 @@
 
 폴더째 호스팅(넷리파이, 카페24, GitHub Pages 등)에 올리면 `index.html`이 첫 화면이 됩니다. 별도 빌드 과정은 없습니다.
 
+페이지 주소는 `.html` 없이 씁니다(예: `https://cleanjo.co.kr/clean`, `/quote?svc=3`). GitHub Pages 는 `/clean` 을 받으면 `clean.html` 을 보여 줍니다. 사이트 안 링크·canonical·sitemap 모두 이 주소로 맞춰 두었습니다. `.html` 을 붙인 옛 주소도 그대로 열립니다.
+`navere5d6bac344385a032fd92b0afedfafa1.html` 은 네이버 서치어드바이저 소유확인 파일이라 지우면 안 됩니다.
+
 ```
 index.html      첫 화면
 clean.html      청소 (clean.html#s1~#s5 로 들어오면 입주·거주·사무실·상가·준공 탭이 바로 열림)
